@@ -20,7 +20,9 @@ const { NotImplementedError } = require('../extensions/index.js');
   let newArr =[];
  for (let i = 0; i < arr.length; i++) {
    const elem = arr[i];
-   if(typeof elem === 'number'){
+  const controls = ['--discard-next', '--discard-prev','--double-next','--double-prev']
+
+   if(!controls.includes(elem)){
      newArr.push(elem)
    }
    else if(elem === '--discard-next' && arr[i+1]){
