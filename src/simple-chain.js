@@ -20,7 +20,7 @@ const chainMaker = {
         throw new Error("You can't remove incorrect link!");
     }
       else{
-      
+
         this.chain = this.chain.filter((value)=> value!== this.chain[position-1])
         return this
       }
