@@ -21,46 +21,60 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 class VigenereCipheringMachine {
 
-  constructor(status){
-    if(status!==false){
-    this.direct = true
-  }else{
-    this.direct = false
-  }
-  }
+   constructor(status = true) {
+      if (status) {
+         this.direct = true
+      } else {
+         this.direct = false
+      }
+   }
 
-  encrypt(word, key) {
-    while(key.length<word.length){
-      key+=key
-    }
-    let newWord = word.split('').filter(char=>char!==' ')
-    return newWord.map((char,i)=>{      
-                 if(char ==='!'){
-                   return char
 
-                 }else{
-                   return String.fromCharCode((((word.toUpperCase().charCodeAt(i)-65)+(key.toUpperCase().charCodeAt(i)-65))%26)+65)
-                 }
-               })
-               .join('')
-  }
-  decrypt(crypt, key) {
-    while(key.length<word.length){
-      key+=key
-    }
-    let newCrypt = crypt.split(' ').join('');
-    return newCrypt.split('')
-                   .map((char,i)=>{
-                  if(char ==='!'){
-                   return char
-                 }else{
-                   return String.fromCharCode((((crypt.toUpperCase().charCodeAt(i)-65)-(key.toUpperCase().charCodeAt(i)-65))%26)+65)
-                 }
-                 })
-                 .join('')
-  }
+   encrypt(s, key) {
+      if (!s || !key) {
+         throw new Error('Incorrect arguments!');
+      }
+      let result = ''
+      const str = s.toUpperCase()
+      key = key.toUpperCase()
+      let n = 0;
+      for (let i = 0; i < str.length; i++) {
+         if (str.charCodeAt(i) < 65 || str.charCodeAt(i) > 90) {
+            result += str[i]
+         }
+         else {
+            result += String.fromCharCode(((str.charCodeAt(i) + key.charCodeAt(n % key.length) - 65 * 2) % (26)) + 65)
+            n++
+         }
+      }
+      return this.direct ? result : result.split('').reverse().join('')
+   }
+
+
+   decrypt(crypt, key) {
+      if (!crypt || !key) {
+         throw new Error('Incorrect arguments!');
+      }
+      let result = ''
+      const strCrypt = crypt.toUpperCase()
+      key = key.toUpperCase()
+      while (crypt.length > key.length) {
+         key += key.toUpperCase()
+      }
+      let n = 0;
+      for (let i = 0; i < strCrypt.length; i++) {
+         if (strCrypt.charCodeAt(i) < 65 || strCrypt.charCodeAt(i) > 90) {
+            result += strCrypt[i]
+         }
+         else {
+            result += String.fromCharCode((((strCrypt.charCodeAt(i) - key.charCodeAt(n)) + 26) % 26) + 65)
+            n++
+         }
+      }
+      return this.direct ? result : result.split('').reverse().join('')
+   }
 }
 
 module.exports = {
-  VigenereCipheringMachine
+   VigenereCipheringMachine
 };
