@@ -14,14 +14,17 @@ const { NotImplementedError } = require('../extensions/index.js');
 function getCommonCharacterCount(s1, s2) {
 
    let count = 0;
-   const s1Arr = s1.split('')
-   const s2Arr = s2.split('')
-   let matches = s1Arr.filter(char => s2Arr.forEach(val => char === val))
-   let machinesSet = Array.from(new Set(matches))
-
-
+   var s2Str = s2;
+   for (let i = 0; i < s1.length; i++) {
+      for (let j = 0; j < s2Str.length; j++) {
+         if (s1[i] === s2Str[j]) {
+            count = count + 1;
+            s2Str = s2Str.slice(0, j) + s2Str.slice(j + 1, s2Str.length)
+            break
+         }
+      }
+   }
    return count
-
 }
 
 module.exports = {
